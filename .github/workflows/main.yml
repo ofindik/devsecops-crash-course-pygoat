@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout Code
       uses: actions/checkout@v2
 
-    - name: Setup python
+    - name: Setup Python
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
@@ -20,4 +20,12 @@ jobs:
       run: pip install bandit
 
     - name: Run Bandit Scan
-      run: bandit -ll -ii -r .
+      run: bandit -ll -ii -r . -f json -o bandit-report.json
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: bandit-findings
+        path: bandit-report.json
+
