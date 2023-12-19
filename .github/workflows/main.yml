@@ -22,7 +22,7 @@ jobs:
     - name: Run Bandit Scan
       run: bandit -ll -ii -r . -f json -o bandit-report.json
 
-    - name: Upload Artifact
+    - name: Upload Bandit Artifact
       uses: actions/upload-artifact@v3
       if: always()
       with:
@@ -52,6 +52,7 @@ jobs:
         dockerhub-password: ${{ secrets.REPO_PWD }}
         command: quickview,cves
         only-severities: critical,high
+        sarif-file: scout-report.sarif
 
     #- name: Docker Scout Command
     #  run: |
@@ -60,4 +61,10 @@ jobs:
     #    echo ${{ secrets.REPO_PWD }} | docker login -u ${{ secrets.REPO_USER }} --password-stdin
     #    docker scout quickview
     #    docker scout cves
-
+    
+    - name: Upload Scout Artifact
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: docker-scout-findings
+        path: scout-report.sarif
